@@ -14,9 +14,18 @@ Knid.prototype = {
     db: 'http://localhost:5984/knid'
   },
   post: function(parg) {
-    console.log('ran post - not yet implemented')
-    console.log('url: ' + parg[0])
-    console.log('text: ' + parg.slice(1).join(' '))
+    var that = this
+    Seq()
+    .seq(function() {
+      that.db.save({
+        url: parg[0],
+        text: parg.slice(1).join(' '),
+        created_at: new Date()
+      }, this)
+    })
+    .seq(function() {
+      console.log('saved!')
+    })
   },
   writeConfig: function() {
     var that = this
@@ -76,11 +85,70 @@ Knid.prototype = {
       views: {
         recent: {
           map: function(doc) {
-            if (doc.knid) {
-              emit(doc.date, doc)
+            if (doc.created_at) {
+              emit(doc.created_at, doc)
             }
           }
         }
+      },
+      lists: {
+        'recent-stream': function(head, req) {
+          /*
+           flatstache.js - Logic-less, section-less templates in JavaScript. Expands simple (flat) Mustache templates.
+           (c) 2011 Nathan Vander Wilt and Aaron McCall. MIT license.
+          */
+          var Flatstache = (function(){
+              var _re3 = /{{{\s*(\w+)\s*}}}/g,
+                  _re2 = /{{\s*(\w+)\s*}}/g,
+                  _re1 = /[&\"'<>\\]/g,  // "
+                  _escape_map = {"&": "&amp;", "\\": "&#92;", "\"": "&quot;", "'": "&#39;", "<": "&lt;", ">": "&gt;"},
+                  _escapeHTML = function(s) {
+                      return s.replace(_re1, function(c) { return _escape_map[c]; });
+                  },
+                  pub = {};
+              pub.to_html = function (template, data) {
+                  return template
+                      .replace(_re3, function (m, key) { return data[key] || ""; })
+                      .replace(_re2, function (m, key) { return _escapeHTML(data[key] || ""); });
+              };
+              return pub;
+          })();
+        
+          var ddoc = this;
+
+          provides('html', function() {
+            posts = []
+            while (row = getRow()) {
+              posts.push(Flatstache.to_html(ddoc.templates.link, row.value));
+            }
+            send(posts.join("\n"))
+            send(Flatstache.to_html(ddoc.templates.page, {posts: posts.join("\n")}))
+          })
+        }
+      },
+      rewrites: [
+        {
+          from: '',
+          to: '_list/recent-stream/recent',
+          method: 'GET',
+          query: {}
+        }
+      ],
+      templates: {
+        page: ["<!DOCTYPE html>"
+             , "<html lang=\"en\">"
+             , "<head>"
+             , "  <meta charset=\"utf-8\" />"
+             , "  <title>knid stream</title>"
+             , "</head>"
+             , "<body id=\"home\">"
+             , "  <h1>knid stream</h1>"
+             , "  {{{ posts }}}"
+             , "</body>"
+             , "</html>\n"].join("\n"),
+        link: ["<div class=\"link\">"
+             , "  <a href=\"{{ url }}\">{{ text }}</a>"
+             , "</div>"].join("\n")
       }
     })
   }
