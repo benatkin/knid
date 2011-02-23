@@ -1,16 +1,40 @@
 #!/usr/bin/env node
 var Knid = require('./knid.js').Knid
   , argv = require('optimist')
-    .usage("Usage: knid --db http://user:password@localhost:5984/knid \\\n"
-         + "p http://cloudhead.io/cradle A nifty CouchDB library for Node.js\n")
-    .demand(['db'])
-    .demand(3)
+    .usage(["knid p http://example.com/ comment can span multiple arguments"
+          , "  creates a configuration file in ~/.knid"
+          , "knid config"
+          , "  creates a configuration file in ~/.knid"
+          , "knid ddoc"
+          , "  creates or updates the ddoc"].join("\n"))
+    .demand(1)
     .check(function (argv) {
-        if (['p'].indexOf(argv._[0]) < 0) {
-            throw 'invalid command: ' + argv._[0];
-        }
+      var command = argv._[0]
+      if (['p', 'config', 'ddoc'].indexOf(command) < 0) {
+        throw 'invalid command: ' + argv._[0]
+      }
+      if (command === 'p') {
+        if (argv._.length < 3) throw 'p takes 2+ arguments'
+      } else if (command === 'config') {
+        if (argv._.length != 1) throw 'config takes no arguments'
+      } else if (command === 'ddoc') {
+        if (argv._.length != 1) throw 'ddoc takes no arguments'
+      }
     })
     .argv
+  , command = argv._[0]
+  , Seq = require('seq')
 
-new Knid(argv).post(argv._.slice(1))
+var knid = new Knid()
+if (command === 'config') {
+  knid.writeConfig()
+} else {
+  knid.loadConfig(function() {
+    if (command === 'p') {
+      knid.post(argv._.slice(1))
+    } else if (command === 'ddoc') {
+      knid.ddoc()
+    }
+  })
+}
 
