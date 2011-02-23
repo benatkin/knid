@@ -10,7 +10,7 @@ The above example will appear as a link.
 # TODO
 
 * Implement interface described above.
-* Store db address in `~/.knid` so `--db` isn't required.
+* Store db address in `~/.knid/config.json` so `--db` isn't required.
 * Add setup instructions
 * Implement posting plain text from stdin, ala [bcat](http://rtomayko.github.com/bcat/)
 * Implement pagination
