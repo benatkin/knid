@@ -23,5 +23,10 @@
    "main": "./knid",
    "bin": {
      "knid" : "./bin.js"
+   },
+   "dependencies" : {
+     "optimist" : ">=0.1.6",
+     "cradle" : "0.5.2",
+     "vows": "0.5.6"
    }
 }
