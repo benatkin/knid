@@ -1,6 +1,6 @@
 {
    "name": "knid",
-   "version": "0.0.2",
+   "version": "0.0.3",
    "description": "Quickly post things to couchdb",
    "keywords": [
      "couchdb",

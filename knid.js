@@ -121,7 +121,6 @@ Knid.prototype = {
             while (row = getRow()) {
               posts.push(Flatstache.to_html(ddoc.templates.link, row.value));
             }
-            send(posts.join("\n"))
             send(Flatstache.to_html(ddoc.templates.page, {posts: posts.join("\n")}))
           })
         }
