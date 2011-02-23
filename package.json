@@ -1,0 +1,27 @@
+{
+   "name": "knid",
+   "version": "0.0.1",
+   "description": "Quickly post things to couchdb",
+   "keywords": [
+     "couchdb",
+     "command-line",
+     "posting"
+   ],
+   "maintainers": [
+     {
+       "name": "Ben Atkin",
+       "email": "ben@benatkin.com",
+       "web": "http://benatkin.com/" 
+     }
+   ],
+   "licenses": [
+     {
+       "type": "MIT",
+       "url": "http://opensource.org/licenses/mit-license.php" 
+     } 
+   ],
+   "main": "./knid",
+   "bin": {
+     "knid" : "./bin.js"
+   }
+}
