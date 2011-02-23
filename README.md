@@ -28,8 +28,9 @@ I have a demo at [stream.benatkin.com](http://stream.benatkin.com/). Public crea
 
 # TODO
 
-* Add setup instructions
+* Add error handling for `knid ddoc`
 * Implement posting plain text from stdin, ala [bcat](http://rtomayko.github.com/bcat/)
+* Add setup instructions
 * Implement pagination
 * Implement daily archive
 
