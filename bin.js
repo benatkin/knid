@@ -30,7 +30,7 @@ if (command === 'config') {
   knid.writeConfig()
 } else {
   knid.loadConfig(function() {
-    if (command === 'p') {
+    if (command === 'post') {
       knid.post(argv._.slice(1))
     } else if (command === 'ddoc') {
       knid.ddoc()
