@@ -21,9 +21,9 @@ Right now only posting links, with text is supported. No date is shown but it's 
 
 I have a demo at [stream.benatkin.com](http://stream.benatkin.com/). Public create permissions are on, so if you do the following you might be able to post to it:
 
-1. run `npm install knid`
+1. run `npm install -g knid`
 2. run `knid config`
-3. open `~/.knid/config.json` and replace `http://localhost:5984/` with `http://bat.cloudant.com/knid`
+3. open `~/.knid/config.json` and replace `http://localhost:5984/` with `https://username:password@bat.cloudant.com/knid`
 4. run `knid p http://example.com/ a comment`
 
 # TODO
@@ -33,4 +33,3 @@ I have a demo at [stream.benatkin.com](http://stream.benatkin.com/). Public crea
 * Add setup instructions
 * Implement pagination
 * Implement daily archive
-
